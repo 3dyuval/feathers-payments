@@ -5,7 +5,7 @@ import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
 import type { PaymentsService } from './payments.class'
 
-export enum Status {
+export enum PaymentStatus {
     Initiated = 'initiated',
     Processing = 'processing',
     Succeeded = 'succeeded',
@@ -15,18 +15,18 @@ export enum Status {
     Cancelled = 'cancelled',
 }
 
-export const StatusSchema = Type.Enum(Status)
+export const StatusSchema = Type.Enum(PaymentStatus)
 
-export const paymentsSchema = Type.Object(
-    {
-        id: Type.Number({ title: 'pKey'}),
-        payment_id: Type.Number({ format: 'uuid' }),
-        status: StatusSchema,
-        timestamp: Type.String({ format: 'date-time' }),
-        metadata: Type.Optional(Type.Object({}, { additionalProperties: true }))
+export const paymentsSchema = Type.Object({
+        id: Type.Number({title: 'Auto-incrementing log ID'}),  //Auto-generated
+        timestamp: Type.String({format: 'date-time'}),           //Auto-generated
+        payment_id: Type.Number({title: 'Payment identifier'}),
+        status: Type.Enum(PaymentStatus),
+        metadata: Type.Optional(Type.Object({}, {additionalProperties: true})),
     },
-    {$id: 'Payments', additionalProperties: false}
+    {$id: 'PaymentStatusLog', additionalProperties: false}
 )
+
 
 export type Payments = Static<typeof paymentsSchema>
 export const paymentsValidator = getValidator(paymentsSchema, dataValidator)
@@ -34,22 +34,13 @@ export const paymentsResolver = resolve<Payments, HookContext<PaymentsService>>(
 
 export const paymentsExternalResolver = resolve<Payments, HookContext<PaymentsService>>({})
 
-// Schema for creating new entries
 export const paymentsDataSchema = Type.Pick(paymentsSchema, ['payment_id', 'status', 'metadata'] as const, {
-    $id: 'PaymentsData'
+    $id: 'PaymentStatusEntry'
 })
+
 export type PaymentsData = Static<typeof paymentsDataSchema>
 export const paymentsDataValidator = getValidator(paymentsDataSchema, dataValidator)
 export const paymentsDataResolver = resolve<Payments, HookContext<PaymentsService>>({})
-
-// Schema for updating existing entries
-export const paymentsPatchSchema = Type.Partial(paymentsSchema, {
-    $id: 'PaymentsPatch'
-})
-export type PaymentsPatch = Static<typeof paymentsPatchSchema>
-export const paymentsPatchValidator = getValidator(paymentsPatchSchema, dataValidator)
-export const paymentsPatchResolver = resolve<Payments, HookContext<PaymentsService>>({})
-
 
 
 // Schema for allowed query properties

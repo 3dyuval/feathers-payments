@@ -2,19 +2,16 @@ import { hooks as schemaHooks } from '@feathersjs/schema'
 
 import {
   paymentsDataValidator,
-  paymentsPatchValidator,
   paymentsQueryValidator,
   paymentsResolver,
   paymentsExternalResolver,
   paymentsDataResolver,
-  paymentsPatchResolver,
   paymentsQueryResolver
 } from './payments.schema'
 
 import type { Application } from '../../declarations'
 import { PaymentsService, getOptions } from './payments.class'
 import { paymentsPath, paymentsMethods } from './payments.shared'
-import { HookContext, NextFunction } from "../../declarations";
 
 
 export * from './payments.class'

@@ -9,7 +9,6 @@ export type {
   Payments,
   PaymentsData,
   PaymentsQuery,
-  PaymentsPatch
 } from './services/payments/payments.shared'
 
 export interface Configuration {
