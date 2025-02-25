@@ -1,6 +1,3 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-import { authenticate } from '@feathersjs/authentication'
-
 import { hooks as schemaHooks } from '@feathersjs/schema'
 
 import {
@@ -17,20 +14,17 @@ import {
 import type { Application } from '../../declarations'
 import { PaymentsService, getOptions } from './payments.class'
 import { paymentsPath, paymentsMethods } from './payments.shared'
+import { HookContext, NextFunction } from "../../declarations";
+
 
 export * from './payments.class'
 export * from './payments.schema'
 
-// A configure function that registers the service and its hooks via `app.configure`
 export const payments = (app: Application) => {
-  // Register our service on the Feathers application
   app.use(paymentsPath, new PaymentsService(getOptions(app)), {
-    // A list of all methods this service exposes externally
     methods: paymentsMethods,
-    // You can add additional custom events to be sent to clients here
     events: []
   })
-  // Initialize hooks
   app.service(paymentsPath).hooks({
     around: {
       all: [
@@ -50,11 +44,6 @@ export const payments = (app: Application) => {
         schemaHooks.validateData(paymentsDataValidator),
         schemaHooks.resolveData(paymentsDataResolver)
       ],
-      patch: [
-        schemaHooks.validateData(paymentsPatchValidator),
-        schemaHooks.resolveData(paymentsPatchResolver)
-      ],
-      remove: []
     },
     after: {
       all: []

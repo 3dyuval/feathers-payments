@@ -1,0 +1,14 @@
+@HOST = http://localhost:3030
+@ID = 1
+
+
+### get payments
+GET {{HOST}}/payments
+
+
+### get payment #id
+GET {{HOST}}/payments/{{ID}}
+
+
+### get payment query
+GET {{HOST}}/payments?status=pendingRetry

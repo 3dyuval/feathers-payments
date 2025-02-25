@@ -1,0 +1,5 @@
+@HOST = http://localhost:3030
+
+### get some-service
+GET {{HOST}}/some-service
+
