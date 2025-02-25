@@ -2,4 +2,9 @@
 
 ### get payments
 
-GET {{HOST}}/payments
+GET {{HOST}}/payment
+
+
+### get some-service
+
+GET {{HOST}}/some-service
